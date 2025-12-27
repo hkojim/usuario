@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping
+@RequestMapping("/usuario")
 @RequiredArgsConstructor
 
 public class UsuarioController {
@@ -19,6 +19,6 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> salvaUsuario(@RequestBody UsuarioDTO usuarioDTO){
-        ResponseEntity.ok(usuarioService.salvaUsuario(usuarioDTO));
+        return ResponseEntity.ok(usuarioService.salvaUsuario(usuarioDTO));
     }
 }
