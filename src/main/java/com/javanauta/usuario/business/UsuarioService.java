@@ -52,10 +52,10 @@ public class UsuarioService {
 
     public UsuarioDTO buscarUsuarioPorEmail(String email){
         try {
-            return usuarioConverter.paraUsuarioDTO(usuarioRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("Email não encontrado " + email)));
+            return usuarioConverter.paraUsuarioDTO(usuarioRepository.findByEmail(email).orElseThrow(() ->
+                    new ResourceNotFoundException("Email não encontrado " + email)));
         } catch (ResourceNotFoundException e){
-            throw new ResourceNotFoundException("Email não encontrado "+email);
+            throw new ResourceNotFoundException("Email não encontrado " + email);
         }
     }
 
@@ -71,7 +71,8 @@ public class UsuarioService {
         dto.setSenha(dto.getSenha() != null ? passwordEncoder.encode(dto.getSenha()) : null);
 
         //Busca os dados do usuario no banco de dados
-        Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email não localizado"));
+        Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException("Email não localizado"));
 
         //Mesclo os dados que recebemos na requisicao DTO com os dados do banco de dados
         Usuario usuario = usuarioConverter.updateUsuario(dto, usuarioEntity);
@@ -81,20 +82,23 @@ public class UsuarioService {
     }
 
     public EnderecoDTO atualizaEndereco(Long idEndereco, EnderecoDTO enderecoDTO){
-        Endereco entity = enderecoRepository.findById(idEndereco).orElseThrow(() -> new ResourceNotFoundException("Id não encontrado "+idEndereco));
+        Endereco entity = enderecoRepository.findById(idEndereco).orElseThrow(() ->
+                new ResourceNotFoundException("Id não encontrado "+idEndereco));
         Endereco endereco = usuarioConverter.updateEndereco(enderecoDTO, entity);
         return usuarioConverter.paraEnderecoDTO(enderecoRepository.save(endereco));
     }
 
     public TelefoneDTO atualizaTelefone (Long idTelefone, TelefoneDTO dto){
-        Telefone entity = telefoneRepository.findById(idTelefone).orElseThrow(() -> new ResourceNotFoundException("Telefone não encontrado "+idTelefone));
+        Telefone entity = telefoneRepository.findById(idTelefone).orElseThrow(() ->
+                new ResourceNotFoundException("Id não encontrado "+idTelefone));
         Telefone telefone = usuarioConverter.upadateTelefone(dto, entity);
         return usuarioConverter.paraTelefoneDTO(telefoneRepository.save(telefone));
     }
 
     public EnderecoDTO cadastraEndereco(String token, EnderecoDTO dto){
         String email = jwtUtil.extrairEmailToken(token.substring(7));
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email não localizado "+email));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException("Email não localizado "+email));
         Endereco endereco = usuarioConverter.paraEnderecoEntity(dto, usuario.getId());
         Endereco enderecoEntity = enderecoRepository.save(endereco);
         return usuarioConverter.paraEnderecoDTO(enderecoEntity);
@@ -102,7 +106,8 @@ public class UsuarioService {
 
     public TelefoneDTO cadastraTelefone(String token, TelefoneDTO dto){
         String email = jwtUtil.extrairEmailToken(token.substring(7));
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email não localizado "+email));
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException("Email não localizado "+email));
         Telefone telefone = usuarioConverter.paraTelefoneEntity(dto, usuario.getId());
         return usuarioConverter.paraTelefoneDTO(telefoneRepository.save(telefone));
     }
